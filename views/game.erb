@@ -1,0 +1,62 @@
+<% if @show_play_again_button %>
+  <p id="playagain"><strong>Play again?</strong>
+    <a href="/game" class="btn btn-primary">Yes</a>
+    <a href="/game_over" class="btn">No</a>
+  </p>
+<% end %>
+
+<h2>Welcome to Blackjack Game!</h2>
+
+<div class="well">
+<h3>Dealer's cards</h3>
+
+  <% session[:dealercards].each_with_index do |card, i| %>
+
+    <% if session[:turn] != "dealer" && i == 0 %>
+      <img id="card" src="/images/cards/cover.jpg">
+    <% else %>
+      <img id="card" src=<%= "/images/cards/#{get_file_name(card)}"%> >   
+    <% end %>
+
+  <% end %>
+
+  
+  <% if @dealer_hit %>
+    <p>Dealer has <%= calculate_total(session[:dealercards]) %> and will hit.</p>
+    <form id="dealer_hit" action="/game/dealer/hit" method="post">
+      <input type="submit" value="Click to see dealer's next card" class="btn btn-primary">
+    </form>
+  <% elsif session[:turn] == "dealer" %>
+    <p>Dealer has <%= calculate_total(session[:dealercards]) %>
+    points in total.</p>
+  <% end %>
+
+
+
+</div>
+
+
+
+
+<div class="well">
+  <h3><%= session[:player_name] %>'s cards</h3>
+    <% session[:playercards].each do |card| %>
+    <img id="card" src=<%= "/images/cards/#{get_file_name(card)}"%> >
+  <% end %>
+
+
+<% if !@error and !@success %>
+  <p><%= session[:player_name] %> has <%= calculate_total(session[:playercards]) %>
+  points in total.
+  </p>
+<% end %>
+
+</div>
+<% if @show_hit_or_stay_button %>
+<form id="hit" action="/game/player/hit" method="post">
+  <input type="submit" value="hit" class="btn btn-success btn-large">
+</form>
+<form id="stay" action="/game/player/stay" method="post">
+  <input type="submit" value="stay" class="btn btn-warning btn-large">
+</form>
+<% end %>
