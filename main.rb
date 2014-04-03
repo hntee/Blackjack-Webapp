@@ -53,14 +53,14 @@ helpers do
   end
 
   def winner!(msg)
-    @success = "#{session[:player_name]} wins! #{msg}"
+    @success = "#{session[:player_name]} wins $#{session[:bet_money]}! #{msg}"
     @show_hit_or_stay_button = false
     @show_play_again_button = true
   end
   
   def loser!(msg)
-    @error = "#{session[:player_name]} loses! #{msg}"
-    @show_hit_or_stay_button = false
+    @error = "#{session[:player_name]} loses $#{session[:bet_money]}! #{msg}"
+    @show_hit_or_stay_button = false 
     @show_play_again_button = true
   end
   
@@ -87,6 +87,8 @@ get '/' do
 end
 
 get '/game' do
+  redirect '/new_game' if !session[:player_name]
+
   session[:turn] = session[:player]
 
   suits = ['H', 'D', 'S', 'C']
@@ -104,7 +106,10 @@ get '/game' do
   session[:dealercards] << session[:deck].pop
 
   if calculate_total(session[:playercards]) == BLACKJACK_AMOUNT
-    winner!("#{session[:player_name]} hit blackjack!}")
+    winner!("#{session[:player_name]} hit blackjack!")
+    session[:total_money] += 2 * session[:bet_money] 
+
+
   end
 
   erb :game
@@ -112,11 +117,12 @@ get '/game' do
 end
 
 get '/new_game' do
+  session.clear
+  session[:total_money] = 500
   erb :set_name_form
 end
 
 post '/new_game' do
-  
   if params[:player_name].empty?
     @error = 'The name cannot be empty!'
     erb :set_name_form
@@ -125,15 +131,47 @@ post '/new_game' do
     erb :set_name_form
   else
     session[:player_name] = params[:player_name]
-    redirect '/game'
+    redirect '/bet'
   end
-  
+end
+
+get '/bet' do
+  if session[:player_name].class == NilClass
+    redirect '/'
+  end
+
+  session[:total_money] ||= 500
+  session[:bet_money] = ''
+  erb :bet
+end
+
+post '/bet' do
+  session[:bet_money] = params[:bet_money]
+
+  # validate the input
+  # have non-digit char or space or is empty
+  if session[:bet_money].match(/[^\d]|\s/) || session[:bet_money].empty? ||session[:bet_money].to_i == 0
+    @error = "Error. You should bet at least one dollar"
+    erb :bet
+  else
+    # convert to an integer
+    session[:bet_money] = session[:bet_money].to_i
+
+    if session[:bet_money] > session[:total_money]
+      @error = "You don't have enough money!"
+      erb :bet
+    else
+      session[:total_money] -= session[:bet_money]
+      redirect '/game'
+    end
+  end
 end
 
 post '/game/player/hit' do
   session[:playercards] << session[:deck].pop
   if calculate_total(session[:playercards]) == BLACKJACK_AMOUNT
     winner!("#{session[:player_name]} hit blackjack!")
+    session[:total_money] += 2 * session[:bet_money] 
   elsif calculate_total(session[:playercards]) > BLACKJACK_AMOUNT
     loser!("#{session[:player_name]} busted at #{calculate_total(session[:playercards])}." )
   end
@@ -154,8 +192,11 @@ get '/game/dealer' do
 
   if dealerpoints == BLACKJACK_AMOUNT
     loser!("Dealer hit blackjack!")
+
   elsif dealerpoints > BLACKJACK_AMOUNT
     winner!("Dealer busted at #{dealerpoints}.")
+    session[:total_money] += 2 * session[:bet_money] 
+
   elsif dealerpoints >= DEALER_STOP_HIT
     redirect '/game/compare'
   else
@@ -182,10 +223,14 @@ get '/game/compare' do
 
   if dealer_total > player_total
     loser!("Dealer has #{dealer_total} and #{session[:player_name]} has #{player_total}.")
+
   elsif dealer_total < player_total
     winner!("Dealer has #{dealer_total} and #{session[:player_name]} has #{player_total}.")
+    session[:total_money] += 2 * session[:bet_money] 
+
   else
     tie!
+    session[:total_money] += session[:bet_money] 
   end
 
   erb :game

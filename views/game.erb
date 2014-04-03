@@ -1,25 +1,27 @@
 <% if @show_play_again_button %>
   <p id="playagain"><strong>Play again?</strong>
-    <a href="/game" class="btn btn-primary">Yes</a>
+    <a href="/bet" class="btn btn-primary">Yes</a>
     <a href="/game_over" class="btn">No</a>
   </p>
 <% end %>
 
-<h2>Welcome to Blackjack Game!</h2>
+<!-- <h2>Welcome to Blackjack Game!</h2> -->
 
-<div class="well">
-<h3>Dealer's cards</h3>
 
-  <% session[:dealercards].each_with_index do |card, i| %>
 
-    <% if session[:turn] != "dealer" && i == 0 %>
-      <img id="card" src="/images/cards/cover.jpg">
-    <% else %>
-      <img id="card" src=<%= "/images/cards/#{get_file_name(card)}"%> >   
+<div class="wrapper">
+    <h4>Dealer's cards</h4>
+  
+    <% session[:dealercards].each_with_index do |card, i| %>
+
+      <% if session[:turn] != "dealer" && i == 0 %>
+        <img id="card" src="/images/cards/cover.jpg">
+      <% else %>
+        <img id="card" src=<%= "/images/cards/#{get_file_name(card)}"%> >   
+      <% end %>
+
     <% end %>
-
-  <% end %>
-
+  
   
   <% if @dealer_hit %>
     <p>Dealer has <%= calculate_total(session[:dealercards]) %> and will hit.</p>
@@ -31,32 +33,33 @@
     points in total.</p>
   <% end %>
 
-
-
 </div>
+  
 
+<div class="wrapper">  
+  <h4>
+    <%= session[:player_name] %>'s cards
 
+    <% if @show_hit_or_stay_button %>
+      <form id="hitt" action="/game/player/hit" method="post">
+        <input type="submit" value="hit" class="btn btn-success">
+      </form>
 
+      <form id="stayy" action="/game/player/stay" method="post">
+        <input type="submit" value="stay" class="btn btn-warning">
+      </form>
+    <% end %>
+  </h4>
 
-<div class="well">
-  <h3><%= session[:player_name] %>'s cards</h3>
-    <% session[:playercards].each do |card| %>
+  <% session[:playercards].each do |card| %>
     <img id="card" src=<%= "/images/cards/#{get_file_name(card)}"%> >
   <% end %>
 
-
-<% if !@error and !@success %>
-  <p><%= session[:player_name] %> has <%= calculate_total(session[:playercards]) %>
-  points in total.
-  </p>
-<% end %>
+  <% if !@error and !@success %>
+    <p><%= session[:player_name] %> has <%= calculate_total(session[:playercards]) %>
+    points in total.
+    </p>
+  <% end %>
 
 </div>
-<% if @show_hit_or_stay_button %>
-<form id="hit" action="/game/player/hit" method="post">
-  <input type="submit" value="hit" class="btn btn-success btn-large">
-</form>
-<form id="stay" action="/game/player/stay" method="post">
-  <input type="submit" value="stay" class="btn btn-warning btn-large">
-</form>
-<% end %>
+

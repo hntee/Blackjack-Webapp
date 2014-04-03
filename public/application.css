@@ -1,6 +1,7 @@
 form#hit, form#stay {
   float: left;
   margin: 0px 15px 20px 0;
+  /*padding: 5px;*/
 }
 
 h2 {
@@ -10,11 +11,6 @@ h2 {
 #card {
   margin-right: 10px;
 }
-
-div.well {
-  position: relative;
-}
-
 
 .nav>li>a {
   padding: 10px 0 !important;
@@ -27,4 +23,104 @@ div.well {
 div.well>p {
   font-size: 1.2em;
   margin-top: 20px;
+}
+
+ul.info {
+	float: right;
+	margin: 0;
+	padding: 0;
+}
+
+ul.info li {
+	text-decoration: none;
+	display: inline;
+	float: left;
+	color: #777;
+	padding: 10px 0 10px 10px;
+}
+
+ul.info>li>span {
+	font-weight: bold;
+	color: #399;
+	font-size: 1.2em;
+}
+
+#player_area {
+	position: relative;
+
+}
+
+
+#hit, #stay {
+	display: inline-block;
+	width: 60px;
+}
+
+#hit {
+	padding-left: 20px;
+}
+
+.wrapper {
+	width: 50%;
+	float: left;
+}
+
+.wrapper h4 {
+	height: 30px;
+}
+
+h4 {
+	color: #777;
+	/*border-bottom: 5px solid #895;*/
+	/*padding-left: 5px;*/
+	font-size: 2.3em;
+}
+
+#hitt, #stayy {
+	display: inline;
+}
+
+img {
+	margin: 3px 3px 10px 3px;
+	width: 130px;
+	border: 1px solid rgba(170,170,170,3);
+	border-radius: 6px;	
+}
+
+.init {
+	display: block;
+	margin: 10% auto;
+	text-align: center;
+}
+
+.init h3 {
+	color: #778;
+	font-size: 3.6em;
+}
+
+.init p {
+	color: #785;
+	padding: 20px;
+	font-size: 3em;
+}
+
+.init input[type="text"] {
+	width: 50%;
+	height: 60px;
+	font-size: 3em;
+	font-family: monospace;
+	color: #66f;
+	text-align: center;
+	margin: 30px;
+}
+
+.init input[type="submit"]{
+	width: 20%;
+	height: 60px;
+	font-size: 3em;
+}
+
+.navbar-inner {
+	background-color: none;
+	background-image: none;
 }

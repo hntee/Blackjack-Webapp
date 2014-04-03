@@ -13,6 +13,14 @@
             <ul class="nav">
               <li><a href="/">Blackjack Game</a></li>
             </ul>
+            <% if session[:player_name]  %>
+              <ul class="info">
+                <% if session[:bet_money] != '' && !@error && !@success && !@tie%>
+                <li>Bet: <span>$<%= session[:bet_money] %></span></li>
+                <% end %>
+                <li>Total: <span>$<%= session[:total_money] %></span></li>
+              </ul>
+            <% end %>
         </div>
       </div>
     </div>
