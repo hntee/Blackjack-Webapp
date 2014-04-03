@@ -1,7 +1,11 @@
+  <%if @error %>
+    <div class="alert alert-error"><%=@error%></div>
+  <% end %>
+
 <div class="init">
 <h3>What's your name</h3>
 <form action="/new_game" method="post">
-	<input type="text" name="player_name"><br/>
-  <input type="submit" class="btn btn-primary">
+  <input type="text" name="player_name" autofocus><br/>
+  <input type="submit" class="btn btn-primary" value="play">
 </form>
 </div>

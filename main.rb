@@ -80,7 +80,7 @@ end
 
 get '/' do
   if session[:player_name]
-    redirect '/game'
+    redirect '/bet'
   else
     redirect '/new_game'
   end
@@ -176,11 +176,12 @@ post '/game/player/hit' do
     loser!("#{session[:player_name]} busted at #{calculate_total(session[:playercards])}." )
   end
 
-  erb :game
+  erb :game, layout: false
 end
 
 post '/game/player/stay' do
   @success = "#{session[:player_name]} has chosen to stay."
+  session[:turn] = "dealer"
   redirect '/game/dealer'
 end
 
@@ -203,7 +204,7 @@ get '/game/dealer' do
     @dealer_hit = true
   end
   
-  erb :game
+  erb :game, layout: false
 end
 
 post '/game/dealer/hit' do
@@ -233,5 +234,5 @@ get '/game/compare' do
     session[:total_money] += session[:bet_money] 
   end
 
-  erb :game
+  erb :game, layout: false
 end

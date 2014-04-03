@@ -1,16 +1,21 @@
+  <%if @error %>
+    <div class="alert alert-error"><%=@error%></div>
+  <% end %>
+
 <div class="init">
   <% if session[:total_money] != 0 %>
   <h3>Make a bet for this round.</h3>
   <!-- <p><%= session[:player_name] %> has $<%= session[:total_money] %>.</p> -->
 
   <form action="/bet" method="post">
-    <input type="text" name="bet_money">
+    <input type="text" name="bet_money" autofocus>
     <br />
     <input type="submit" class="btn btn-info" value="bet">
   </form>
   <% else %>
   <h3>You have lost every penny!</h3>
     <p id="playagain"><strong>Restart the game?</strong>
+      <br/>
       <a href="/new_game" class="btn btn-primary">Yes</a>
       <a href="/game_over" class="btn">No</a>
     </p>

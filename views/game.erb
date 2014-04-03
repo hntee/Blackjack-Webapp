@@ -1,16 +1,36 @@
+<div id='game'>
+
+<div id="placeholder">
+  <%if @error %>
+    <div class="alert alert-error"><%=@error%></div>
+  <% end %>
+  <%if @success %>
+    <div class="alert alert-success"><%=@success%></div>
+  <% end %>
+  <%if @tie %>
+  <div class="alert"><%=@tie%></div>
+  <% end %>
+
+
 <% if @show_play_again_button %>
-  <p id="playagain"><strong>Play again?</strong>
-    <a href="/bet" class="btn btn-primary">Yes</a>
-    <a href="/game_over" class="btn">No</a>
+  <p id="playagain">
+    <a href="/bet" class="btn btn-primary">Play again</a>
+    <a href="/game_over" class="btn btn-warning">Exit</a>
   </p>
 <% end %>
-
+</div>
 <!-- <h2>Welcome to Blackjack Game!</h2> -->
 
 
 
 <div class="wrapper">
-    <h4>Dealer's cards</h4>
+    <h4>Dealer's cards 
+      <% if session[:turn] == "dealer" %>
+        <span class="scores" >
+          <%= calculate_total(session[:dealercards]) %>
+        </span>
+      <% end %>
+    </h4>
   
     <% session[:dealercards].each_with_index do |card, i| %>
 
@@ -24,13 +44,11 @@
   
   
   <% if @dealer_hit %>
-    <p>Dealer has <%= calculate_total(session[:dealercards]) %> and will hit.</p>
+
     <form id="dealer_hit" action="/game/dealer/hit" method="post">
       <input type="submit" value="Click to see dealer's next card" class="btn btn-primary">
     </form>
-  <% elsif session[:turn] == "dealer" %>
-    <p>Dealer has <%= calculate_total(session[:dealercards]) %>
-    points in total.</p>
+
   <% end %>
 
 </div>
@@ -39,27 +57,24 @@
 <div class="wrapper">  
   <h4>
     <%= session[:player_name] %>'s cards
-
     <% if @show_hit_or_stay_button %>
-      <form id="hitt" action="/game/player/hit" method="post">
+      <form id="hit" action="/game/player/hit" method="post">
         <input type="submit" value="hit" class="btn btn-success">
       </form>
 
-      <form id="stayy" action="/game/player/stay" method="post">
+      <form id="stay" action="/game/player/stay" method="post">
         <input type="submit" value="stay" class="btn btn-warning">
       </form>
     <% end %>
+
+      <span class="scores" ><%= calculate_total(session[:playercards]) %></span>
   </h4>
 
   <% session[:playercards].each do |card| %>
     <img id="card" src=<%= "/images/cards/#{get_file_name(card)}"%> >
   <% end %>
 
-  <% if !@error and !@success %>
-    <p><%= session[:player_name] %> has <%= calculate_total(session[:playercards]) %>
-    points in total.
-    </p>
-  <% end %>
 
 </div>
 
+</div>
