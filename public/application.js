@@ -15,7 +15,6 @@ function playerHit() {
 			url: '/game/player/hit'
 		}).done(function(msg) {
 			$('#game').replaceWith(msg);
-
 		});
 		return false;
 	});

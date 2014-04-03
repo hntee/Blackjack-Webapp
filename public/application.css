@@ -14,6 +14,7 @@ h2 {
 
 #playagain .btn{
   margin-right: 5px;
+  margin-top: -3px;
 }
 
 div.well>p {
@@ -21,9 +22,14 @@ div.well>p {
   margin-top: 20px;
 }
 
+.alert {
+	margin-right:35px;
+	margin-top: 8px;
+}
+
 ul.info {
 	float: right;
-	margin: 0;
+	margin: 0 35px 0 0;
 	padding: 0;
 }
 
